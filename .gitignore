@@ -1,7 +1,9 @@
 # Project specification files (keep these for reference)
 # openapi.yaml
-# pokemons.json
 # requirements.md
+
+# Large seed data file
+pokemons.json
 
 # Dependencies
 node_modules/
