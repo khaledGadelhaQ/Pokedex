@@ -1,0 +1,3 @@
+# Pokedex
+
+## Your Faviorate Place.
