@@ -56,18 +56,31 @@ cp .env.example .env
 # DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
 ```
 
-### 4. Database Setup (Coming in Step 2)
+### 4. Database Setup
+
+#### Using Docker (Recommended)
 
 ```bash
-# Initialize Prisma
+# Start PostgreSQL container (requires sudo)
+sudo docker-compose up -d
+
+# Generate Prisma Client
+cd apps/backend
 pnpm prisma generate
 
 # Run migrations
 pnpm prisma migrate dev
 
-# Seed the database
+# Seed the database (Step 4)
 pnpm prisma db seed
 ```
+
+#### PostgreSQL Details
+- **Host:** localhost
+- **Port:** 5433 (to avoid conflict with local PostgreSQL)
+- **Database:** pokedex
+- **User:** postgres
+- **Password:** postgres
 
 ## 🏃 Running the Application
 
@@ -170,11 +183,18 @@ Pokedex/
 - [x] Configure environment variables
 - [x] Set up API prefix and CORS
 
-### 🔄 Step 2: Database & Prisma Setup (Next)
-- [ ] Install Prisma dependencies
-- [ ] Initialize Prisma
-- [ ] Define Pokemon & Team models
-- [ ] Run initial migration
+### ✅ Step 2: Database & Prisma Setup
+- [x] Install Prisma dependencies
+- [x] Initialize Prisma
+- [x] Define Pokemon & Team models
+- [x] Run initial migration
+- [x] Create PrismaModule and PrismaService
+- [x] Configure Docker PostgreSQL
+
+### 🔄 Step 3: Module & CRUD Logic (Next)
+- [ ] Implement Pokemon module (GET endpoints)
+- [ ] Implement Team module (full CRUD)
+- [ ] Implement Search functionality
 
 ### 📝 Step 3: Module & CRUD Logic
 - [ ] Implement Pokemon module (GET endpoints)

@@ -5,6 +5,9 @@
 # Large seed data file
 pokemons.json
 
+# Personal notes and references
+QUICK_REFERENCE.md
+
 # Dependencies
 node_modules/
 .pnp
@@ -18,12 +21,10 @@ coverage/
 dist/
 build/
 
-# Environment variables
+# Environment variables (keep templates, ignore actual config)
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
 
 # IDE
 .vscode/

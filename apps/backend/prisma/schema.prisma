@@ -1,0 +1,63 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Pokemon model - stores all 151 original Pokemon
+model Pokemon {
+  id        Int      @id
+  name      String   @unique
+  sprites   Json     // Stores all sprite URLs (front_default, front_shiny, back_default, etc.)
+  types     Json     // Array of type objects with name and slot
+  height    Int?
+  weight    Int?
+  moves     Json?    // Array of move objects with move name and version_group_details
+  order     Int?
+  species   String?
+  stats     Json?    // Array of stat objects (hp, attack, defense, etc.)
+  abilities Json?    // Array of ability objects with ability name, is_hidden, and slot
+  form      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  teams     TeamPokemon[]
+
+  @@map("pokemons")
+}
+
+// Team model - represents a trainer's team (max 6 Pokemon)
+model Team {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  pokemons  TeamPokemon[]
+
+  @@map("teams")
+}
+
+// Junction table for many-to-many relationship between Teams and Pokemon
+model TeamPokemon {
+  id        Int      @id @default(autoincrement())
+  teamId    Int      @map("team_id")
+  pokemonId Int      @map("pokemon_id")
+  position  Int      // Position in team (1-6)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  pokemon   Pokemon  @relation(fields: [pokemonId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, pokemonId])
+  @@unique([teamId, position])
+  @@map("team_pokemons")
+}
+
