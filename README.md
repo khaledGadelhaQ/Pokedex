@@ -71,9 +71,11 @@ pnpm prisma:generate
 # Run migrations
 pnpm prisma:migrate
 
-# Seed the database with 151 Pokemon
+# Seed the database with 151 Pokemon (downloads and saves sprite images locally)
 pnpm seed
 ```
+
+> **Note:** Seeding and importing Pokemon will automatically download sprite images from PokeAPI and save them to `apps/backend/uploads/sprites/`. These images are served statically at `/images/sprites/` and are not committed to git.
 
 #### PostgreSQL Details
 - **Host:** localhost
@@ -192,12 +194,36 @@ npx prisma studio
 # Opens Prisma Studio at http://localhost:5555
 ```
 
-## 📚 API Documentation
+## � Authentication
+
+Team creation and modification endpoints require authentication using a Bearer token:
+
+**Protected Endpoints:**
+- `POST /api/v1/teams` - Create a new team
+- `POST /api/v1/teams/:id` - Update team Pokemon
+
+**Token:** `pokedex-secret-token-2024`
+
+**Usage Example:**
+```bash
+curl -X POST "http://localhost:3000/api/v1/teams" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer pokedex-secret-token-2024" \
+  -d '{"name": "My Team"}'
+```
+
+> **Note:** This is a development token. In production, implement proper JWT authentication.
+
+## �📚 API Documentation
 
 Once the backend is running, access the interactive API documentation at:
 
 - Swagger UI: `http://localhost:3000/api/docs`
 - OpenAPI JSON: `http://localhost:3000/api/docs-json`
+
+**Static Assets:**
+- Pokemon sprites: `http://localhost:3000/images/sprites/{pokemonId}-{type}.png`
+  - Example: `http://localhost:3000/images/sprites/25-front_default.png` (Pikachu)
 
 ## 📁 Project Structure
 
@@ -260,11 +286,15 @@ Pokedex/
 - [x] Create database JSON type interfaces
 - [x] Implement transform functions for type safety
 - [x] Implement Search functionality (name & type search)
+- [x] Add pagination support to Pokemon and Team endpoints
 
-### 📁 Step 5: File Uploads (Coming Soon)
-- [ ] Configure Multer for local file storage
-- [ ] Implement image upload endpoints
-- [ ] Handle sprite uploads
+### ✅ Step 5: Authentication & Image Storage
+- [x] Implement AuthGuard with hardcoded token for Team routes
+- [x] Create image download utility for Pokemon sprites
+- [x] Update seed script to download and save images locally
+- [x] Update import-pokemon to download images
+- [x] Configure static file serving for uploaded images
+- [x] Store local image paths instead of external URLs
 
 ### 🧪 Step 6: Testing & Documentation (Coming Soon)
 - [ ] Write unit tests for services

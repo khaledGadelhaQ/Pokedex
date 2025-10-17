@@ -2,8 +2,10 @@ import { PrismaClient, Prisma } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
 import { PokeApiPokemon } from './types/pokeapi.types';
+import { downloadPokemonSprites } from '../src/utils/image-downloader';
 
 const prisma = new PrismaClient();
+const uploadsDir = path.join(__dirname, '../uploads');
 
 function transformPokemonData(rawPokemon: PokeApiPokemon) {
   // Transform abilities: extract just the ability name and other needed fields
@@ -75,11 +77,21 @@ async function main() {
   await prisma.teamPokemon.deleteMany({});
   await prisma.pokemon.deleteMany({});
 
-  console.log('💾 Seeding Pokemon...');
+  console.log('💾 Seeding Pokemon with images...');
   let count = 0;
 
   for (const rawPokemon of pokemons) {
+    // Download sprite images and get local paths
+    console.log(`  📥 Downloading images for ${rawPokemon.name}...`);
+    const localSprites = await downloadPokemonSprites(
+      rawPokemon.id,
+      rawPokemon.sprites as Record<string, string | null>,
+      uploadsDir,
+    );
+
+    // Transform data with local sprite paths
     const transformedData = transformPokemonData(rawPokemon);
+    transformedData.sprites = localSprites as Prisma.InputJsonValue;
 
     await prisma.pokemon.create({
       data: transformedData,
@@ -91,7 +103,7 @@ async function main() {
     }
   }
 
-  console.log(`✅ Successfully seeded ${count} Pokemon!`);
+  console.log(`✅ Successfully seeded ${count} Pokemon with local images!`);
 }
 
 main()

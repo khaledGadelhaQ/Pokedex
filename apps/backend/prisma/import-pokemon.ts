@@ -1,8 +1,11 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import * as https from 'https';
+import * as path from 'path';
 import { PokeApiPokemon } from './types/pokeapi.types';
+import { downloadPokemonSprites } from '../src/utils/image-downloader';
 
 const prisma = new PrismaClient();
+const uploadsDir = path.join(__dirname, '../uploads');
 
 function fetchPokemon(idOrName: string): Promise<PokeApiPokemon> {
   return new Promise((resolve, reject) => {
@@ -83,10 +86,20 @@ async function importPokemon(idOrName: string) {
     console.log(`🔍 Fetching Pokemon "${idOrName}" from PokeAPI...`);
 
     const rawPokemon = await fetchPokemon(idOrName);
+
+    // Download sprite images and get local paths
+    console.log(`📥 Downloading images for ${rawPokemon.name}...`);
+    const localSprites = await downloadPokemonSprites(
+      rawPokemon.id,
+      rawPokemon.sprites as Record<string, string | null>,
+      uploadsDir,
+    );
+
     const transformedData = transformPokemonData(rawPokemon);
+    transformedData.sprites = localSprites as Prisma.InputJsonValue;
 
     console.log(
-      `📥 Importing ${transformedData.name} (ID: ${transformedData.id})...`,
+      `� Importing ${transformedData.name} (ID: ${transformedData.id})...`,
     );
 
     // Check if Pokemon already exists

@@ -6,11 +6,13 @@ import {
   Body,
   ParseIntPipe,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { TeamsService } from './teams.service';
 import { TeamDto } from './dto/team.dto';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { SetTeamPokemonsDto } from './dto/set-team-pokemons.dto';
+import { AuthGuard } from '../common/guards/auth.guard';
 
 @Controller('teams')
 export class TeamsController {
@@ -33,11 +35,13 @@ export class TeamsController {
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   create(@Body() createTeamDto: CreateTeamDto): Promise<TeamDto> {
     return this.teamsService.create(createTeamDto);
   }
 
   @Post(':id')
+  @UseGuards(AuthGuard)
   setPokemons(
     @Param('id', ParseIntPipe) id: number,
     @Body() setTeamPokemonsDto: SetTeamPokemonsDto,
