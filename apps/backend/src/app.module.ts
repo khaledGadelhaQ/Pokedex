@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { PokemonsModule } from './pokemons/pokemons.module';
 import { TeamsModule } from './teams/teams.module';
+import { SearchModule } from './search/search.module';
 import { configuration } from './config/configuration';
 import { validateEnv } from './config/env.validation';
 
@@ -17,6 +18,7 @@ import { validateEnv } from './config/env.validation';
     PrismaModule,
     PokemonsModule,
     TeamsModule,
+    SearchModule,
   ],
   controllers: [],
   providers: [],

@@ -8,8 +8,14 @@ export class PokemonsController {
   constructor(private readonly pokemonsService: PokemonsService) {}
 
   @Get()
-  findAll(@Query('sort') sort?: string): Promise<PokemonDto[]> {
-    return this.pokemonsService.findAll(sort);
+  findAll(
+    @Query('sort') sort?: string,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+  ): Promise<PokemonDto[]> {
+    const limitNumber = limit ? parseInt(limit, 10) : undefined;
+    const offsetNumber = offset ? parseInt(offset, 10) : undefined;
+    return this.pokemonsService.findAll(sort, limitNumber, offsetNumber);
   }
 
   @Get(':id')

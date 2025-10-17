@@ -8,8 +8,20 @@ import { SetTeamPokemonsDto } from './dto/set-team-pokemons.dto';
 export class TeamsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(): Promise<TeamDto[]> {
+  async findAll(
+    search?: string,
+    limit?: number,
+    offset?: number,
+  ): Promise<TeamDto[]> {
     const teams = await this.prisma.team.findMany({
+      where: search
+        ? {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          }
+        : undefined,
       include: {
         pokemons: {
           select: {
@@ -21,6 +33,8 @@ export class TeamsService {
           },
         },
       },
+      take: limit,
+      skip: offset,
     });
 
     return teams.map((team) => ({

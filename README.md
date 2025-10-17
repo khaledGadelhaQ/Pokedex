@@ -245,21 +245,21 @@ Pokedex/
 - [x] Create PrismaModule and PrismaService
 - [x] Configure Docker PostgreSQL with docker-compose
 
-### ✅ Step 4: Data Seeding
+### ✅ Step 3: Data Seeding
 - [x] Create seed script for 151 Pokemon
 - [x] Parse and transform pokemons.json
 - [x] Seed database with initial data
 - [x] Create import command for individual Pokemon from PokeAPI
 - [x] Create shared PokeAPI type interfaces
 
-### ✅ Step 3: Module & CRUD Logic
+### ✅ Step 4: Module & CRUD Logic
 - [x] Implement Pokemon module with GET endpoints
 - [x] Implement Team module with full CRUD
 - [x] Create DTOs matching OpenAPI spec
 - [x] Add validation with class-validator
 - [x] Create database JSON type interfaces
 - [x] Implement transform functions for type safety
-- [ ] Implement Search functionality
+- [x] Implement Search functionality (name & type search)
 
 ### 📁 Step 5: File Uploads (Coming Soon)
 - [ ] Configure Multer for local file storage

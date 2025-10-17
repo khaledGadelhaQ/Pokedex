@@ -27,7 +27,11 @@ type PokemonFull = Pokemon;
 export class PokemonsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(sort?: string): Promise<PokemonDto[]> {
+  async findAll(
+    sort?: string,
+    limit?: number,
+    offset?: number,
+  ): Promise<PokemonDto[]> {
     // Determine sort order based on valid sort values
     const orderBy: { id: 'asc' | 'desc' } | { name: 'asc' | 'desc' } =
       sort === 'name-asc'
@@ -46,6 +50,8 @@ export class PokemonsService {
         sprites: true,
         types: true,
       },
+      take: limit,
+      skip: offset,
     });
 
     // Transform to match OpenAPI spec format

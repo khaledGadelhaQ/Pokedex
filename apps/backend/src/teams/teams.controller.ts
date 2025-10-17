@@ -5,6 +5,7 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { TeamsService } from './teams.service';
 import { TeamDto } from './dto/team.dto';
@@ -16,8 +17,14 @@ export class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
   @Get()
-  findAll(): Promise<TeamDto[]> {
-    return this.teamsService.findAll();
+  findAll(
+    @Query('search') search?: string,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+  ): Promise<TeamDto[]> {
+    const limitNumber = limit ? parseInt(limit, 10) : undefined;
+    const offsetNumber = offset ? parseInt(offset, 10) : undefined;
+    return this.teamsService.findAll(search, limitNumber, offsetNumber);
   }
 
   @Get(':id')
