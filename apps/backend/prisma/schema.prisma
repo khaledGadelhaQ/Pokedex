@@ -35,13 +35,30 @@ model Pokemon {
 model Team {
   id        Int      @id @default(autoincrement())
   name      String
+  userId    Int?     @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   pokemons  TeamPokemon[]
 
   @@map("teams")
+}
+
+// User model - represents a trainer/user
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  teams     Team[]
+
+  @@map("users")
 }
 
 // Junction table for many-to-many relationship between Teams and Pokemon

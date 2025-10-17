@@ -10,6 +10,8 @@
     "backend:start:prod": "pnpm --filter backend start:prod",
     "backend:test": "pnpm --filter backend test",
     "backend:test:e2e": "pnpm --filter backend test:e2e",
+    "backend:seed": "pnpm --filter backend seed",
+    "backend:import-pokemon": "pnpm --filter backend import-pokemon",
     "frontend:dev": "pnpm --filter frontend dev",
     "frontend:build": "pnpm --filter frontend build",
     "frontend:preview": "pnpm --filter frontend preview"

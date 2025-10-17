@@ -66,13 +66,13 @@ sudo docker-compose up -d
 
 # Generate Prisma Client
 cd apps/backend
-pnpm prisma generate
+pnpm prisma:generate
 
 # Run migrations
-pnpm prisma migrate dev
+pnpm prisma:migrate
 
-# Seed the database (Step 4)
-pnpm prisma db seed
+# Seed the database with 151 Pokemon
+pnpm seed
 ```
 
 #### PostgreSQL Details
@@ -81,6 +81,14 @@ pnpm prisma db seed
 - **Database:** pokedex
 - **User:** postgres
 - **Password:** postgres
+
+### 5. Visualize Database (Optional)
+
+```bash
+cd apps/backend
+npx prisma studio
+# Opens at http://localhost:5555
+```
 
 ## 🏃 Running the Application
 
@@ -141,6 +149,31 @@ pnpm backend:test:e2e
 pnpm backend:test:cov
 ```
 
+## 🗄️ Database Management
+
+### Seed Database
+```bash
+# Seed all 151 Pokemon from pokemons.json
+pnpm backend:seed
+```
+
+### Import Individual Pokemon
+```bash
+# Import by ID or name from PokeAPI
+pnpm backend:import-pokemon <id or name>
+
+# Examples:
+pnpm backend:import-pokemon 25        # Import Pikachu
+pnpm backend:import-pokemon charizard # Import Charizard
+```
+
+### Visualize Database
+```bash
+cd apps/backend
+npx prisma studio
+# Opens Prisma Studio at http://localhost:5555
+```
+
 ## 📚 API Documentation
 
 Once the backend is running, access the interactive API documentation at:
@@ -153,28 +186,31 @@ Once the backend is running, access the interactive API documentation at:
 ```
 Pokedex/
 ├── apps/
-│   ├── backend/              # Nest.js backend application
+│   ├── backend/                    # Nest.js backend application
 │   │   ├── src/
-│   │   │   ├── pokemons/     # Pokemon module
-│   │   │   ├── teams/        # Team module
-│   │   │   ├── search/       # Search module
-│   │   │   └── main.ts       # Application entry point
-│   │   ├── prisma/           # Database schema & migrations
-│   │   ├── test/             # E2E tests
+│   │   │   ├── config/             # Configuration module
+│   │   │   ├── prisma/             # Prisma module & service
+│   │   │   ├── app.module.ts       # Root module
+│   │   │   └── main.ts             # Application entry point
+│   │   ├── prisma/
+│   │   │   ├── migrations/         # Database migrations
+│   │   │   ├── schema.prisma       # Database schema
+│   │   │   ├── seed.ts             # Seed script for 151 Pokemon
+│   │   │   └── import-pokemon.ts   # Import individual Pokemon from PokeAPI
+│   │   ├── .env.development        # Development environment
+│   │   ├── .env.production         # Production environment
+│   │   ├── .env.test               # Test environment
 │   │   └── package.json
 │   │
-│   └── frontend/             # Vue.js frontend application (WIP)
-│       ├── src/
-│       ├── public/
-│       └── package.json
+│   └── frontend/                   # Vue.js frontend (Coming Soon)
 │
-├── pnpm-workspace.yaml       # pnpm workspace configuration
-├── package.json              # Root package.json
-├── docker-compose.yml        # Docker services configuration
-└── README.md                 # This file
+├── pnpm-workspace.yaml             # pnpm workspace configuration
+├── package.json                    # Root package.json
+├── docker-compose.yml              # PostgreSQL container
+└── README.md                       # This file
 ```
 
-## 🎯 Development Roadmap
+## 🎯 Backend Development Roadmap
 
 ### ✅ Step 1: Project Initialization & Monorepo Setup
 - [x] Initialize Git repository
@@ -186,47 +222,41 @@ Pokedex/
 ### ✅ Step 2: Database & Prisma Setup
 - [x] Install Prisma dependencies
 - [x] Initialize Prisma
-- [x] Define Pokemon & Team models
+- [x] Define Pokemon, Team, and User models
 - [x] Run initial migration
 - [x] Create PrismaModule and PrismaService
-- [x] Configure Docker PostgreSQL
+- [x] Configure Docker PostgreSQL with docker-compose
 
-### 🔄 Step 3: Module & CRUD Logic (Next)
+### ✅ Step 4: Data Seeding (Completed Early)
+- [x] Create seed script for 151 Pokemon
+- [x] Parse and transform pokemons.json
+- [x] Seed database with initial data
+- [x] Create import command for individual Pokemon from PokeAPI
+
+### 🔄 Step 3: Module & CRUD Logic (In Progress)
 - [ ] Implement Pokemon module (GET endpoints)
 - [ ] Implement Team module (full CRUD)
 - [ ] Implement Search functionality
+- [ ] Create DTOs matching OpenAPI spec
 
-### 📝 Step 3: Module & CRUD Logic
-- [ ] Implement Pokemon module (GET endpoints)
-- [ ] Implement Team module (full CRUD)
-- [ ] Implement Search functionality
-
-### 🌱 Step 4: Data Seeding
-- [ ] Create seed script
-- [ ] Parse and transform pokemons.json
-- [ ] Seed database with initial data
-
-### 📁 Step 5: File Uploads
+### 📁 Step 5: File Uploads (Coming Soon)
 - [ ] Configure Multer for local file storage
 - [ ] Implement image upload endpoints
 - [ ] Handle sprite uploads
 
-### 🧪 Step 6: Testing & Documentation
+### 🧪 Step 6: Testing & Documentation (Coming Soon)
 - [ ] Write unit tests for services
 - [ ] Write e2e tests for controllers
 - [ ] Set up Swagger documentation
 
-### 🐳 Step 7: Dockerization
+### 🐳 Step 7: Dockerization (Coming Soon)
 - [ ] Create Dockerfile for backend
-- [ ] Create docker-compose.yml
-- [ ] Configure PostgreSQL container
+- [ ] Update docker-compose.yml for full stack
+- [ ] Configure production environment
 
-### 🎨 Step 8: Frontend Development
-- [ ] Set up Vue.js project
-- [ ] Implement responsive UI (mobile & tablet)
-- [ ] Connect to backend API
-- [ ] Implement routing
-- [ ] Add state management
+## 🎨 Frontend Development Roadmap
+
+Coming soon! The frontend will be built with Vue.js 3, TypeScript, and Tailwind CSS.
 
 ## 📝 License
 
