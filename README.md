@@ -151,6 +151,24 @@ pnpm backend:test:cov
 
 ## 🗄️ Database Management
 
+### Database Schema
+
+Our database uses PostgreSQL with Prisma ORM. The schema consists of 4 main models with proper relationships:
+
+**📊 Interactive Schema Viewer:** [View on dbdiagram.io](https://dbdiagram.io/d/Pokedex-68f2b4e42e68d21b410c4496)
+
+**Schema Overview:**
+- **Pokemon** - Stores all 151 original Pokemon with stats, abilities, types, and sprites
+- **Team** - Represents a trainer's team (max 6 Pokemon)
+- **User** - Trainer/user accounts
+- **TeamPokemon** - Junction table for many-to-many relationship between Teams and Pokemon
+
+**Key Relationships:**
+- One Pokemon can be in many Teams (many-to-many)
+- One Team can have many Pokemon (many-to-many)
+- One User can have many Teams (one-to-many)
+- TeamPokemon tracks position (1-6) and relationships
+
 ### Seed Database
 ```bash
 # Seed all 151 Pokemon from pokemons.json
@@ -227,17 +245,21 @@ Pokedex/
 - [x] Create PrismaModule and PrismaService
 - [x] Configure Docker PostgreSQL with docker-compose
 
-### ✅ Step 4: Data Seeding (Completed Early)
+### ✅ Step 4: Data Seeding
 - [x] Create seed script for 151 Pokemon
 - [x] Parse and transform pokemons.json
 - [x] Seed database with initial data
 - [x] Create import command for individual Pokemon from PokeAPI
+- [x] Create shared PokeAPI type interfaces
 
-### 🔄 Step 3: Module & CRUD Logic (In Progress)
-- [ ] Implement Pokemon module (GET endpoints)
-- [ ] Implement Team module (full CRUD)
+### ✅ Step 3: Module & CRUD Logic
+- [x] Implement Pokemon module with GET endpoints
+- [x] Implement Team module with full CRUD
+- [x] Create DTOs matching OpenAPI spec
+- [x] Add validation with class-validator
+- [x] Create database JSON type interfaces
+- [x] Implement transform functions for type safety
 - [ ] Implement Search functionality
-- [ ] Create DTOs matching OpenAPI spec
 
 ### 📁 Step 5: File Uploads (Coming Soon)
 - [ ] Configure Multer for local file storage

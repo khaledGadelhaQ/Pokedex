@@ -1,74 +1,9 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
+import { PokeApiPokemon } from './types/pokeapi.types';
 
 const prisma = new PrismaClient();
-
-interface PokeApiAbility {
-  ability: {
-    name: string;
-    url: string;
-  };
-  is_hidden: boolean;
-  slot: number;
-}
-
-interface PokeApiType {
-  type: {
-    name: string;
-    url: string;
-  };
-  slot: number;
-}
-
-interface PokeApiMove {
-  move: {
-    name: string;
-    url: string;
-  };
-  version_group_details: Array<{
-    level_learned_at: number;
-    move_learn_method: {
-      name: string;
-      url: string;
-    };
-    version_group: {
-      name: string;
-      url: string;
-    };
-  }>;
-}
-
-interface PokeApiStat {
-  stat: {
-    name: string;
-    url: string;
-  };
-  base_stat: number;
-  effort: number;
-}
-
-interface PokeApiPokemon {
-  id: number;
-  name: string;
-  height: number;
-  weight: number;
-  order: number;
-  sprites: Record<string, unknown>;
-  types: PokeApiType[];
-  abilities: PokeApiAbility[];
-  moves: PokeApiMove[];
-  stats: PokeApiStat[];
-  species: {
-    name: string;
-    url: string;
-  };
-  forms: Array<{
-    name: string;
-    url: string;
-  }>;
-  [key: string]: unknown;
-}
 
 function transformPokemonData(rawPokemon: PokeApiPokemon) {
   // Transform abilities: extract just the ability name and other needed fields

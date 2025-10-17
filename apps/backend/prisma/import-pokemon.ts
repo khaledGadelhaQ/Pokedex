@@ -1,78 +1,10 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import * as https from 'https';
+import { PokeApiPokemon } from './types/pokeapi.types';
 
 const prisma = new PrismaClient();
 
-interface PokeApiResponse {
-  id: number;
-  name: string;
-  height: number;
-  weight: number;
-  order: number;
-  sprites: {
-    back_default: string | null;
-    back_female: string | null;
-    back_shiny: string | null;
-    back_shiny_female: string | null;
-    front_default: string | null;
-    front_female: string | null;
-    front_shiny: string | null;
-    front_shiny_female: string | null;
-    other?: Record<string, unknown>;
-    versions?: Record<string, unknown>;
-    [key: string]: unknown;
-  };
-  types: Array<{
-    slot: number;
-    type: {
-      name: string;
-      url: string;
-    };
-  }>;
-  abilities: Array<{
-    ability: {
-      name: string;
-      url: string;
-    };
-    is_hidden: boolean;
-    slot: number;
-  }>;
-  moves: Array<{
-    move: {
-      name: string;
-      url: string;
-    };
-    version_group_details: Array<{
-      level_learned_at: number;
-      move_learn_method: {
-        name: string;
-        url: string;
-      };
-      version_group: {
-        name: string;
-        url: string;
-      };
-    }>;
-  }>;
-  stats: Array<{
-    base_stat: number;
-    effort: number;
-    stat: {
-      name: string;
-      url: string;
-    };
-  }>;
-  species: {
-    name: string;
-    url: string;
-  };
-  forms: Array<{
-    name: string;
-    url: string;
-  }>;
-}
-
-function fetchPokemon(idOrName: string): Promise<PokeApiResponse> {
+function fetchPokemon(idOrName: string): Promise<PokeApiPokemon> {
   return new Promise((resolve, reject) => {
     const url = `https://pokeapi.co/api/v2/pokemon/${idOrName.toLowerCase()}`;
 
@@ -86,7 +18,7 @@ function fetchPokemon(idOrName: string): Promise<PokeApiResponse> {
 
         res.on('end', () => {
           if (res.statusCode === 200) {
-            resolve(JSON.parse(data) as PokeApiResponse);
+            resolve(JSON.parse(data) as PokeApiPokemon);
           } else {
             reject(
               new Error(`Failed to fetch Pokemon: ${res.statusCode} ${data}`),
@@ -100,7 +32,7 @@ function fetchPokemon(idOrName: string): Promise<PokeApiResponse> {
   });
 }
 
-function transformPokemonData(rawPokemon: PokeApiResponse) {
+function transformPokemonData(rawPokemon: PokeApiPokemon) {
   const abilities = rawPokemon.abilities.map((a) => ({
     ability: a.ability.name,
     is_hidden: a.is_hidden,
