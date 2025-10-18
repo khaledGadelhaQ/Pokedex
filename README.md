@@ -72,11 +72,22 @@ pnpm prisma:generate
 # Run migrations
 pnpm prisma:migrate
 
-# Seed the database with 151 Pokemon (downloads and saves sprite images locally)
+# Seed the database with 151 Pokemon
+# By default, uses remote sprite URLs (fast, no downloads)
 pnpm seed
+
+# OR: Seed with downloaded images (slower, stores images locally)
+SKIP_IMAGE_DOWNLOAD=false pnpm seed
 ```
 
-> **Note:** Seeding and importing Pokemon will automatically download sprite images from PokeAPI and save them to `apps/backend/uploads/sprites/`. These images are served statically at `/images/sprites/` and are not committed to git.
+> **Seeding Options:**
+> - **Default (Fast):** `SKIP_IMAGE_DOWNLOAD=true` - Uses remote sprite URLs from PokeAPI, no local storage needed
+> - **With Downloads:** `SKIP_IMAGE_DOWNLOAD=false` - Downloads and saves sprite images to `apps/backend/uploads/sprites/`, served statically at `/images/sprites/`
+> 
+> The `SKIP_IMAGE_DOWNLOAD` environment variable can be set in your `.env` files:
+> - `.env.development` - Set to `true` for faster development
+> - `.env.test` - Set to `true` for faster test runs
+> - `.env.production` - Set to `false` if you want to serve images locally, or `true` if using a CDN
 
 #### PostgreSQL Details
 - **Host:** localhost
@@ -161,8 +172,11 @@ docker-compose up -d
 # Run migrations
 docker-compose exec backend pnpm prisma:migrate
 
-# Seed database
+# Seed database (uses remote URLs by default, set in docker-compose.yml)
 docker-compose exec backend pnpm seed
+
+# OR: Seed with downloaded images
+docker-compose exec backend sh -c "SKIP_IMAGE_DOWNLOAD=false pnpm seed"
 
 # The API will be available at http://localhost:3000/api/v1
 ```

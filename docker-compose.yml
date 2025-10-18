@@ -32,6 +32,7 @@ services:
       PORT: 3000
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/pokedex?schema=public
       CORS_ORIGIN: '*'
+      SKIP_IMAGE_DOWNLOAD: 'true'  # Use remote URLs by default in Docker
     ports:
       - '3000:3000'
     volumes:

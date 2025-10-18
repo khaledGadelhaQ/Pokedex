@@ -77,21 +77,34 @@ async function main() {
   await prisma.teamPokemon.deleteMany({});
   await prisma.pokemon.deleteMany({});
 
-  console.log('💾 Seeding Pokemon with images...');
+  // Check if SKIP_IMAGE_DOWNLOAD environment variable is set
+  const skipImages = process.env.SKIP_IMAGE_DOWNLOAD === 'true';
+
+  if (skipImages) {
+    console.log('💾 Seeding Pokemon without downloading images...');
+  } else {
+    console.log('💾 Seeding Pokemon with images...');
+  }
+
   let count = 0;
 
   for (const rawPokemon of pokemons) {
-    // Download sprite images and get local paths
-    console.log(`  📥 Downloading images for ${rawPokemon.name}...`);
-    const localSprites = await downloadPokemonSprites(
-      rawPokemon.id,
-      rawPokemon.sprites as Record<string, string | null>,
-      uploadsDir,
-    );
-
-    // Transform data with local sprite paths
     const transformedData = transformPokemonData(rawPokemon);
-    transformedData.sprites = localSprites as Prisma.InputJsonValue;
+
+    if (skipImages) {
+      // Use remote sprite URLs from JSON directly
+      console.log(`  ✓ Adding ${rawPokemon.name}...`);
+      transformedData.sprites = rawPokemon.sprites as Prisma.InputJsonValue;
+    } else {
+      // Download sprite images and get local paths
+      console.log(`  📥 Downloading images for ${rawPokemon.name}...`);
+      const localSprites = await downloadPokemonSprites(
+        rawPokemon.id,
+        rawPokemon.sprites as Record<string, string | null>,
+        uploadsDir,
+      );
+      transformedData.sprites = localSprites as Prisma.InputJsonValue;
+    }
 
     await prisma.pokemon.create({
       data: transformedData,
@@ -103,7 +116,13 @@ async function main() {
     }
   }
 
-  console.log(`✅ Successfully seeded ${count} Pokemon with local images!`);
+  if (skipImages) {
+    console.log(
+      `✅ Successfully seeded ${count} Pokemon with remote sprite URLs!`,
+    );
+  } else {
+    console.log(`✅ Successfully seeded ${count} Pokemon with local images!`);
+  }
 }
 
 main()
