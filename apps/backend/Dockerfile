@@ -41,21 +41,21 @@ COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 # Copy backend package.json
 COPY apps/backend/package.json ./apps/backend/
 
+# Copy Prisma schema (needed for generation)
+COPY apps/backend/prisma ./apps/backend/prisma
+
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile
 
-# Copy built application from builder
-COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
-COPY --from=builder /app/apps/backend/node_modules/.prisma ./apps/backend/node_modules/.prisma
+# Generate Prisma Client in production stage
+WORKDIR /app/apps/backend
+RUN npx prisma generate
 
-# Copy Prisma schema for migrations
-COPY apps/backend/prisma ./apps/backend/prisma
+# Copy built application from builder
+COPY --from=builder /app/apps/backend/dist ./dist
 
 # Create uploads directory
-RUN mkdir -p /app/apps/backend/uploads/sprites
-
-# Set working directory to backend
-WORKDIR /app/apps/backend
+RUN mkdir -p uploads/sprites
 
 # Expose port
 EXPOSE 3000
