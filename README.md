@@ -20,6 +20,7 @@ A modern, full-stack Pokédex application for the original 151 Pokémon, built w
 ### Infrastructure
 - **Monorepo:** pnpm workspaces
 - **Containerization:** Docker & Docker Compose
+- **Container Registry:** Multi-stage Docker builds
 - **Version Control:** Git
 
 ## 📋 Prerequisites
@@ -130,13 +131,49 @@ pnpm backend:start:prod
 
 ### Using Docker
 
+The entire stack can be run with Docker Compose:
+
 ```bash
-# Start all services
+# Start all services (PostgreSQL + Backend)
 docker-compose up -d
+
+# View logs
+docker-compose logs -f backend
+
+# Check service status
+docker-compose ps
 
 # Stop all services
 docker-compose down
+
+# Stop and remove volumes (⚠️ this will delete database data)
+docker-compose down -v
 ```
+
+**First time setup with Docker:**
+
+```bash
+# Start services
+docker-compose up -d
+
+# Wait for services to be healthy (check with docker-compose ps)
+
+# Run migrations
+docker-compose exec backend pnpm prisma:migrate
+
+# Seed database
+docker-compose exec backend pnpm seed
+
+# The API will be available at http://localhost:3000/api/v1
+```
+
+**Docker Services:**
+- **PostgreSQL** - Available on port 5433
+- **Backend API** - Available on port 3000
+- **Persistent volumes** - Database and uploaded images are persisted
+
+**Environment Variables:**
+The docker-compose.yml uses production settings. To customize, create a `.env` file or modify the environment section in docker-compose.yml.
 
 ## 🧪 Testing
 
@@ -332,10 +369,15 @@ Pokedex/
 - [ ] Write tests for services (optional)
 - [ ] Improve test coverage (optional)
 
-### 🐳 Step 8: Dockerization (Coming Soon)
-- [ ] Create Dockerfile for backend
-- [ ] Update docker-compose.yml for full stack
-- [ ] Configure production environment
+### ✅ Step 8: Dockerization
+- [x] Create Dockerfile for backend
+- [x] Multi-stage build for optimized image size
+- [x] Update docker-compose.yml for full stack
+- [x] Configure production environment variables
+- [x] Add health checks for services
+- [x] Set up persistent volumes for database and uploads
+- [x] Create Docker network for service communication
+- [x] Add .dockerignore for clean builds
 
 ## 🎨 Frontend Development Roadmap
 
