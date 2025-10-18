@@ -214,12 +214,24 @@ curl -X POST "http://localhost:3000/api/v1/teams" \
 
 > **Note:** This is a development token. In production, implement proper JWT authentication.
 
-## �📚 API Documentation
+##  API Documentation
 
-Once the backend is running, access the interactive API documentation at:
+The API is fully documented with **OpenAPI/Swagger**. Once the backend is running, access the interactive documentation:
 
-- Swagger UI: `http://localhost:3000/api/docs`
-- OpenAPI JSON: `http://localhost:3000/api/docs-json`
+**Swagger UI:** `http://localhost:3000/api/docs`
+- Interactive API explorer
+- Try out endpoints directly from the browser
+- See request/response examples
+- Test authentication with bearer token
+
+**OpenAPI JSON:** `http://localhost:3000/api/docs-json`
+
+### Features:
+- ✅ All endpoints documented with examples
+- ✅ Request/response schemas
+- ✅ Authentication integration (test with bearer token)
+- ✅ Query parameter validation
+- ✅ Error responses documented
 
 **Static Assets:**
 - Pokemon sprites: `http://localhost:3000/images/sprites/{pokemonId}-{type}.png`
@@ -295,13 +307,22 @@ Pokedex/
 - [x] Update import-pokemon to download images
 - [x] Configure static file serving for uploaded images
 - [x] Store local image paths instead of external URLs
+- [x] Create common folder structure (guards, filters)
+- [x] Implement global exception filter with dev/prod modes
 
-### 🧪 Step 6: Testing & Documentation (Coming Soon)
+### ✅ Step 6: API Documentation
+- [x] Set up Swagger/OpenAPI documentation
+- [x] Document all endpoints with @ApiTags, @ApiOperation
+- [x] Add request/response examples to DTOs
+- [x] Document authentication with bearer token
+- [x] Add query parameter validation documentation
+
+### 🧪 Step 7: Testing (Coming Soon)
 - [ ] Write unit tests for services
 - [ ] Write e2e tests for controllers
-- [ ] Set up Swagger documentation
+- [ ] Test authentication flows
 
-### 🐳 Step 7: Dockerization (Coming Soon)
+### 🐳 Step 8: Dockerization (Coming Soon)
 - [ ] Create Dockerfile for backend
 - [ ] Update docker-compose.yml for full stack
 - [ ] Configure production environment
