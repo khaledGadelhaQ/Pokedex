@@ -317,10 +317,20 @@ Pokedex/
 - [x] Document authentication with bearer token
 - [x] Add query parameter validation documentation
 
-### 🧪 Step 7: Testing (Coming Soon)
-- [ ] Write unit tests for services
-- [ ] Write e2e tests for controllers
-- [ ] Test authentication flows
+### ✅ Step 7: Testing
+- [x] Set up Jest testing framework
+- [x] Write unit tests for Pokemon controller
+- [x] Write unit tests for Teams controller
+- [x] Write unit tests for Search controller
+- [x] All unit tests passing (9 tests, 3 suites)
+- [x] Write e2e tests for API endpoints
+- [x] Test Pokemon endpoints (list, get by id, 404 handling)
+- [x] Test Search endpoint (by name and type)
+- [x] Test Team endpoints (list, create with auth)
+- [x] Test authentication (valid token, invalid token, no token)
+- [x] All e2e tests passing (10 tests)
+- [ ] Write tests for services (optional)
+- [ ] Improve test coverage (optional)
 
 ### 🐳 Step 8: Dockerization (Coming Soon)
 - [ ] Create Dockerfile for backend
