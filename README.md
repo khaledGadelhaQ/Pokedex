@@ -2,7 +2,23 @@
 
 A modern, full-stack Pokédex application for the original 151 Pokémon, built with Nest.js backend and Vue.js frontend in a monorepo architecture.
 
-## 🚀 Tech Stack
+## � Table of Contents
+
+- [🚀 Tech Stack](#-tech-stack)
+- [📋 Prerequisites](#-prerequisites)
+- [🛠️ Setup Instructions](#️-setup-instructions)
+- [🏃 Running the Application](#-running-the-application)
+- [🧪 Testing](#-testing)
+- [🗄️ Database Management](#️-database-management)
+- [🔐 Authentication](#-authentication)
+- [📚 API Documentation](#-api-documentation)
+- [📁 Project Structure](#-project-structure)
+- [🎯 Backend Development Roadmap](#-backend-development-roadmap)
+- [🚀 Deployment](#-deployment)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+
+## �🚀 Tech Stack
 
 ### Backend
 - **Framework:** Nest.js (TypeScript)
