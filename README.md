@@ -444,14 +444,14 @@ Pokedex/
 - [x] Add navigation between list and detail
 - [x] Make Pokemon clickable in the grid
 
-#### ⏳ Step 4: Implement Search
-- [ ] Add search input to HomePage
-- [ ] Implement computed property for filtering
-- [ ] Filter by Pokemon name
-- [ ] Filter by Pokemon number
-- [ ] Add search debouncing for performance
-- [ ] Show "no results" message
-- [ ] Clear search functionality
+#### ✅ Step 4: Implement Search
+- [x] Add search input to HomePage
+- [x] Implement computed property for filtering
+- [x] Filter by Pokemon name
+- [x] Filter by Pokemon number
+- [x] Add search debouncing for performance
+- [x] Show "no results" message
+- [x] Clear search functionality
 
 #### ⏳ Step 5: Favorites System with Persistence
 - [ ] Create Pinia favorites store
