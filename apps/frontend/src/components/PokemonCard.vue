@@ -101,9 +101,3 @@ const getTypeColor = (typeName: string) => {
   </div>
 </template>
 
-<style scoped>
-h3, p, span {
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-}
-</style>
-

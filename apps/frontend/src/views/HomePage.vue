@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { FunnelIcon, ArrowsUpDownIcon } from '@heroicons/vue/24/outline'
 import { pokemonService } from '../services/api'
@@ -18,6 +18,9 @@ const searchResults = ref<Pokemon[]>([])
 const isSearching = ref(false)
 const loading = ref(true)
 const error = ref<string | null>(null)
+const showSortMenu = ref(false)
+const sortBy = ref<'number' | 'name'>('number')
+const sortOrder = ref<'asc' | 'desc'>('asc')
 const pokemonStore = usePokemonStore()
 const favoritesStore = useFavoritesStore()
 const teamStore = useTeamStore()
@@ -50,7 +53,20 @@ const displayedPokemons = computed(() => {
     pokemonList = pokemonList.filter(p => teamStore.isInTeam(p.id))
   }
   
-  return pokemonList
+  // Sort Pokemon
+  const sorted = [...pokemonList].sort((a, b) => {
+    let comparison = 0
+    
+    if (sortBy.value === 'number') {
+      comparison = a.id - b.id
+    } else {
+      comparison = a.name.localeCompare(b.name)
+    }
+    
+    return sortOrder.value === 'asc' ? comparison : -comparison
+  })
+  
+  return sorted
 })
 
 // Fetch Pokemon from backend
@@ -130,16 +146,52 @@ const handleSearch = async (query: string) => {
   }, 300)
 }
 
+// Toggle sort menu
+const toggleSortMenu = () => {
+  showSortMenu.value = !showSortMenu.value
+}
+
+// Set sort option
+const setSortOption = (by: 'number' | 'name', order: 'asc' | 'desc') => {
+  sortBy.value = by
+  sortOrder.value = order
+  showSortMenu.value = false
+}
+
+// Clear sort (reset to default)
+const clearSort = () => {
+  sortBy.value = 'number'
+  sortOrder.value = 'asc'
+  showSortMenu.value = false
+}
+
+// Check if current sort is default
+const isDefaultSort = computed(() => sortBy.value === 'number' && sortOrder.value === 'asc')
+
+// Close sort menu when clicking outside
+const closeSortMenu = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  if (!target.closest('.sort-menu-container')) {
+    showSortMenu.value = false
+  }
+}
+
 // Fetch on component mount
 onMounted(() => {
   fetchPokemons()
+  document.addEventListener('click', closeSortMenu)
+})
+
+// Cleanup on unmount
+onBeforeUnmount(() => {
+  document.removeEventListener('click', closeSortMenu)
 })
 </script>
 
 <template>
   <div class="flex flex-col h-full">
     <!-- Header -->
-    <div class="px-4 pt-16 md:pt-[90px] pb-4">
+    <div class="px-4 pt-6 md:pt-8 pb-4">
       <div class="flex items-center justify-between mb-4 md:mb-6">
         <h1 
           @click="router.push({ name: 'home' })"
@@ -148,13 +200,69 @@ onMounted(() => {
           {{ showTeamOnly ? 'My Team' : showFavoritesOnly ? 'Favorites' : 'Pokédex' }}
         </h1>
         <!-- Filter/Sort Icons -->
-        <div class="flex items-center gap-2 md:gap-3">
-          <button class="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+        <div class="flex items-center gap-2 md:gap-3 relative sort-menu-container">
+          <!-- Clear Sort Button -->
+          <button 
+            @click="clearSort"
+            :class="[
+              'p-1 rounded-lg transition-colors',
+              isDefaultSort ? 'opacity-40 cursor-default' : 'hover:bg-gray-100'
+            ]"
+            :disabled="isDefaultSort"
+          >
             <FunnelIcon class="w-5 h-5 text-dark-1" />
           </button>
-          <button class="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+          
+          <!-- Sort Menu Button -->
+          <button 
+            @click="toggleSortMenu"
+            class="p-1 hover:bg-gray-100 rounded-lg transition-colors relative"
+          >
             <ArrowsUpDownIcon class="w-5 h-5 text-dark-1" />
           </button>
+          
+          <!-- Sort Dropdown Menu -->
+          <div 
+            v-if="showSortMenu"
+            class="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50 overflow-hidden"
+          >
+            <button
+              @click="setSortOption('name', 'asc')"
+              :class="[
+                'w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors',
+                sortBy === 'name' && sortOrder === 'asc' ? 'bg-gray-100 font-medium' : ''
+              ]"
+            >
+              Alphabetical A-Z
+            </button>
+            <button
+              @click="setSortOption('name', 'desc')"
+              :class="[
+                'w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors',
+                sortBy === 'name' && sortOrder === 'desc' ? 'bg-gray-100 font-medium' : ''
+              ]"
+            >
+              Alphabetical Z-A
+            </button>
+            <button
+              @click="setSortOption('number', 'asc')"
+              :class="[
+                'w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors',
+                sortBy === 'number' && sortOrder === 'asc' ? 'bg-gray-100 font-medium' : ''
+              ]"
+            >
+              Number Low to High
+            </button>
+            <button
+              @click="setSortOption('number', 'desc')"
+              :class="[
+                'w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors',
+                sortBy === 'number' && sortOrder === 'desc' ? 'bg-gray-100 font-medium' : ''
+              ]"
+            >
+              Number High to Low
+            </button>
+          </div>
         </div>
       </div>
 

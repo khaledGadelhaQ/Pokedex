@@ -451,6 +451,9 @@ Pokedex/
 - [x] Add search debouncing for performance
 - [x] Show "no results" message
 - [x] Clear search functionality
+- [x] Add sorting functionality with dropdown menu
+- [x] Sort by Alphabetical (A-Z, Z-A) and Number (Low-High, High-Low)
+- [x] Add clear button to reset sort to default
 
 #### ✅ Step 5: Favorites System with Persistence
 - [x] Create Pinia favorites store
