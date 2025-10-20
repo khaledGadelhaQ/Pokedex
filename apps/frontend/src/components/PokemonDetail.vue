@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { HeartIcon } from '@heroicons/vue/24/solid'
+import { HeartIcon as HeartIconOutline } from '@heroicons/vue/24/outline'
 import { usePokemonStore } from '../stores/pokemon'
+import { useFavoritesStore } from '../stores/favorites'
 import { pokemonService } from '../services/api'
 
 const route = useRoute()
 const router = useRouter()
 const pokemonStore = usePokemonStore()
+const favoritesStore = useFavoritesStore()
 const loading = ref(false)
 const error = ref<string | null>(null)
 
@@ -16,6 +20,19 @@ const capitalizedName = computed(() => {
   if (!selectedPokemon.value) return ''
   return selectedPokemon.value.name.charAt(0).toUpperCase() + selectedPokemon.value.name.slice(1)
 })
+
+// Check if current Pokemon is favorited
+const isFavorite = computed(() => {
+  if (!selectedPokemon.value) return false
+  return favoritesStore.isFavorite(selectedPokemon.value.id)
+})
+
+// Toggle favorite
+const toggleFavorite = () => {
+  if (selectedPokemon.value) {
+    favoritesStore.toggleFavorite(selectedPokemon.value.id)
+  }
+}
 
 // Fetch Pokemon if store is empty but we have a route param
 onMounted(async () => {
@@ -74,7 +91,23 @@ onMounted(async () => {
     </div>
 
     <!-- Pokemon Detail -->
-    <div v-else class="text-center px-4">
+    <div v-else class="relative text-center px-4">
+      <!-- Favorite Button (Top Right) -->
+      <button
+        @click="toggleFavorite"
+        class="absolute top-0 right-4 p-2 rounded-full hover:bg-white/20 transition-colors"
+        :aria-label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+      >
+        <HeartIcon 
+          v-if="isFavorite" 
+          class="w-8 h-8 text-red-500"
+        />
+        <HeartIconOutline 
+          v-else 
+          class="w-8 h-8 text-white"
+        />
+      </button>
+
       <h1 class="text-4xl font-bold text-white mb-4">
         {{ capitalizedName }}
       </h1>

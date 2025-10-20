@@ -25,6 +25,21 @@ build/
 .env
 .env.local
 .env.*.local
+.env.development
+.env.production
+.env.test
+
+# Backend-specific ignores
+apps/backend/.gitignore
+apps/backend/.env*
+!apps/backend/.env.example
+apps/backend/uploads/
+apps/backend/generated/
+
+# Frontend-specific ignores
+apps/frontend/.gitignore
+apps/frontend/.env*
+!apps/frontend/.env.example
 
 # IDE
 .vscode/
