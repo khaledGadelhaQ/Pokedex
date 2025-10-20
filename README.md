@@ -423,26 +423,26 @@ Pokedex/
 - [x] Configure PostCSS and Tailwind
 - [x] Create basic App.vue with RouterView
 
-#### ⏳ Step 2: Display the Pokémon List
-- [ ] Create TypeScript type definitions for Pokemon
-- [ ] Set up API service with axios
-- [ ] Create PokemonCard.vue component
-- [ ] Display Pokemon grid on HomePage
-- [ ] Show Pokemon image, number, name, and types
-- [ ] Add loading and error states
-- [ ] Style cards with Tailwind CSS
-- [ ] Implement responsive grid layout
+#### ✅ Step 2: Display the Pokémon List
+- [x] Create TypeScript type definitions for Pokemon
+- [x] Set up API service with axios
+- [x] Create PokemonCard.vue component
+- [x] Display Pokemon grid on HomePage
+- [x] Show Pokemon image, number, name, and types
+- [x] Add loading and error states
+- [x] Style cards with Tailwind CSS
+- [x] Implement responsive grid layout
 
 ### ⏳ Part 2: Core Features (The MVP)
 
-#### ⏳ Step 3: Routing to a Detail Page
-- [ ] Set up routes for home (/)
-- [ ] Create route for detail page (/pokemon/:id)
+#### ✅ Step 3: Routing to a Detail Page
+- [x] Set up routes for home (/)
+- [x] Create route for detail page (/pokemon/:id)
 - [ ] Create 404 NotFound page
-- [ ] Create PokemonDetailPage.vue
-- [ ] Fetch and display detailed Pokemon data
-- [ ] Add navigation between list and detail
-- [ ] Make Pokemon clickable in the grid
+- [x] Create PokemonDetailPage.vue
+- [x] Fetch and display detailed Pokemon data
+- [x] Add navigation between list and detail
+- [x] Make Pokemon clickable in the grid
 
 #### ⏳ Step 4: Implement Search
 - [ ] Add search input to HomePage

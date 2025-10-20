@@ -10,7 +10,9 @@ export interface Pokemon {
     [key: string]: string | null | undefined
   }
   types: Array<{
-    type: string
+    type: {
+      name: string
+    }
     slot: number
   }>
   height?: number | null

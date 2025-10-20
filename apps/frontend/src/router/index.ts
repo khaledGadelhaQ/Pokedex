@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from './../views/HomePage.vue'
+import PokemonDetail from './../components/PokemonDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,10 +8,25 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomePage,
+      components: {
+        default: HomePage,
+        detail: PokemonDetail,
+      },
     },
-    // We'll add more routes in later steps
+    {
+      path: '/pokemons/:id',
+      name: 'pokemon-detail',
+      components: {
+        default: HomePage,
+        detail: PokemonDetail,
+      },
+      // allow the detail view to receive the route params as props if needed
+      props: {
+        detail: true,
+      },
+    },
   ],
 })
 
 export default router
+
