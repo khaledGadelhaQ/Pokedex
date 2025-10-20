@@ -5,6 +5,7 @@ import { FunnelIcon, ArrowsUpDownIcon } from '@heroicons/vue/24/outline'
 import { pokemonService } from '../services/api'
 import { usePokemonStore } from '../stores/pokemon'
 import { useFavoritesStore } from '../stores/favorites'
+import { useTeamStore } from '../stores/team'
 import type { Pokemon } from '../types/pokemon'
 import SearchBar from '../components/SearchBar.vue'
 import TeamFavoritesButtons from '../components/TeamFavoritesButtons.vue'
@@ -19,6 +20,7 @@ const loading = ref(true)
 const error = ref<string | null>(null)
 const pokemonStore = usePokemonStore()
 const favoritesStore = useFavoritesStore()
+const teamStore = useTeamStore()
 const router = useRouter()
 const route = useRoute()
 let searchTimeout: ReturnType<typeof setTimeout> | null = null
@@ -29,6 +31,11 @@ const showFavoritesOnly = computed(() => {
   return route.meta.showFavoritesOnly === true || route.query.favorites === '1'
 })
 
+// Check if we should show only team members
+const showTeamOnly = computed(() => {
+  return route.meta.showTeamOnly === true || route.query.team === '1'
+})
+
 // Computed: Show search results if searching, otherwise show all/filtered pokemons
 const displayedPokemons = computed(() => {
   let pokemonList = searchQuery.value.trim() ? searchResults.value : pokemons.value
@@ -36,6 +43,11 @@ const displayedPokemons = computed(() => {
   // Filter by favorites if in favorites mode
   if (showFavoritesOnly.value) {
     pokemonList = pokemonList.filter(p => favoritesStore.isFavorite(p.id))
+  }
+  
+  // Filter by team if in team mode
+  if (showTeamOnly.value) {
+    pokemonList = pokemonList.filter(p => teamStore.isInTeam(p.id))
   }
   
   return pokemonList
@@ -70,13 +82,18 @@ const handleSelectPokemon = async (pokemon: Pokemon) => {
 
   // Navigate to the detail URL so it's bookmarkable/shareable
   try {
-    // Preserve favorites mode if currently in favorites view (check both meta and query)
+    // Preserve favorites or team mode if currently in those views (check both meta and query)
     const preserveFavorites = route.meta.showFavoritesOnly === true || route.query.favorites === '1'
+    const preserveTeam = route.meta.showTeamOnly === true || route.query.team === '1'
+    
+    const query: Record<string, string> = {}
+    if (preserveFavorites) query.favorites = '1'
+    if (preserveTeam) query.team = '1'
+    
     await router.push({
       name: 'pokemon-detail',
       params: { id: String(pokemon.id) },
-      // keep a state so the detail view can navigate back preserving filter
-      query: preserveFavorites ? { favorites: '1' } : {},
+      query,
     })
   } catch (navErr) {
     console.error('Router navigation error:', navErr)
@@ -124,8 +141,11 @@ onMounted(() => {
     <!-- Header -->
     <div class="px-4 pt-16 md:pt-[90px] pb-4">
       <div class="flex items-center justify-between mb-4 md:mb-6">
-        <h1 class="font-bold text-2xl md:text-[34px] leading-tight md:leading-[41px] tracking-[0.374px] text-dark-1">
-          {{ showFavoritesOnly ? 'Favorites' : 'Pokédex' }}
+        <h1 
+          @click="router.push({ name: 'home' })"
+          class="font-bold text-2xl md:text-[34px] leading-tight md:leading-[41px] tracking-[0.374px] text-dark-1 cursor-pointer hover:opacity-80 transition-opacity"
+        >
+          {{ showTeamOnly ? 'My Team' : showFavoritesOnly ? 'Favorites' : 'Pokédex' }}
         </h1>
         <!-- Filter/Sort Icons -->
         <div class="flex items-center gap-2 md:gap-3">
@@ -188,10 +208,12 @@ onMounted(() => {
     <div v-else class="flex-1 flex items-center justify-center px-4">
       <div class="text-center">
         <p class="text-xl font-bold text-dark-1 mb-2">
-          {{ showFavoritesOnly ? 'No Favorites Yet' : 'No Pokémon Found' }}
+          {{ showTeamOnly ? 'No Team Members Yet' : showFavoritesOnly ? 'No Favorites Yet' : 'No Pokémon Found' }}
         </p>
         <p class="text-grey-1">
-          {{ showFavoritesOnly 
+          {{ showTeamOnly 
+            ? 'Click the purple team icon on any Pokémon to add it to your team (max 6)' 
+            : showFavoritesOnly 
             ? 'Click the heart icon on any Pokémon to add it to your favorites' 
             : 'Try searching with a different name or type' 
           }}

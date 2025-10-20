@@ -26,6 +26,17 @@ const router = createRouter({
       },
     },
     {
+      path: '/pokemons/team',
+      name: 'team',
+      components: {
+        default: HomePage,
+        detail: PokemonDetail,
+      },
+      meta: {
+        showTeamOnly: true,
+      },
+    },
+    {
       path: '/pokemons/:id',
       name: 'pokemon-detail',
       components: {

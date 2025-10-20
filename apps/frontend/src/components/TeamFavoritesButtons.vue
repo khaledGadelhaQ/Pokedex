@@ -3,10 +3,21 @@ import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { UsersIcon, HeartIcon } from '@heroicons/vue/24/outline'
 import { useFavoritesStore } from '../stores/favorites'
+import { useTeamStore } from '../stores/team'
 
 const router = useRouter()
 const route = useRoute()
 const favoritesStore = useFavoritesStore()
+const teamStore = useTeamStore()
+
+// Get live team count
+const teamCount = computed(() => teamStore.teamCount)
+
+// Format the team subtitle text
+const teamText = computed(() => {
+  const count = teamCount.value
+  return count === 1 ? '1 pokemon' : `${count} pokemons`
+})
 
 // Get live favorites count
 const favoritesCount = computed(() => favoritesStore.favoritesCount)
@@ -17,10 +28,24 @@ const favoritesText = computed(() => {
   return count === 1 ? '1 pokemon' : `${count} pokemons`
 })
 
+// Whether the team view is active (route name or meta)
+const isTeamActive = computed(() => {
+  return route.name === 'team' || route.meta.showTeamOnly === true || route.query.team === '1'
+})
+
 // Whether the favorites view is active (route name or meta)
 const isFavoritesActive = computed(() => {
   return route.name === 'favorites' || route.meta.showFavoritesOnly === true || route.query.favorites === '1'
 })
+
+// Toggle team: navigate to team if not active, otherwise go home
+const toggleTeam = () => {
+  if (isTeamActive.value) {
+    router.push({ name: 'home' })
+  } else {
+    router.push({ name: 'team' })
+  }
+}
 
 // Toggle favorites: navigate to favorites if not active, otherwise go home
 const toggleFavorites = () => {
@@ -35,11 +60,11 @@ const toggleFavorites = () => {
 <template>
   <div class="buttons-container">
     <!-- My Team Button -->
-    <button class="team-button">
+    <button :class="['team-button', isTeamActive ? 'team-active' : '']" @click="toggleTeam">
       <UsersIcon class="button-icon" />
       <div class="button-content">
         <div class="button-title">My Team</div>
-        <div class="button-subtitle">4 pokemons</div>
+        <div class="button-subtitle">{{ teamText }}</div>
       </div>
     </button>
 
@@ -89,6 +114,12 @@ button:hover {
   width: 28px;
   height: 28px;
   color: rgba(70, 70, 156, 0.3);
+}
+
+/* Active state for team button */
+.team-active {
+  filter: brightness(0.85);
+  box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.03);
 }
 
 /* Favorites Button - Green Gradient */
