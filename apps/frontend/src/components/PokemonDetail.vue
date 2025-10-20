@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { usePokemonStore } from '../stores/pokemon'
 import { pokemonService } from '../services/api'
 
 const route = useRoute()
+const router = useRouter()
 const pokemonStore = usePokemonStore()
 const loading = ref(false)
 const error = ref<string | null>(null)
@@ -22,14 +23,29 @@ onMounted(async () => {
   
   // If we have a route param but no selected Pokemon in store, fetch it
   if (pokemonId && !selectedPokemon.value) {
+    const id = Number(pokemonId)
+    
+    // Validate Pokemon ID (must be between 1 and 151)
+    if (isNaN(id) || id < 1 || id > 151) {
+      // Redirect to 404 page for invalid IDs
+      router.push({ name: 'not-found' })
+      return
+    }
+    
     try {
       loading.value = true
       error.value = null
-      const pokemon = await pokemonService.getById(Number(pokemonId))
+      const pokemon = await pokemonService.getById(id)
       pokemonStore.selectPokemon(pokemon)
     } catch (err: any) {
       console.error('Error fetching Pokemon by ID:', err)
-      error.value = `Failed to load Pokémon: ${err.message}`
+      
+      // If it's a 404 error, redirect to not found page
+      if (err.response?.status === 404) {
+        router.push({ name: 'not-found' })
+      } else {
+        error.value = `Failed to load Pokémon: ${err.message}`
+      }
     } finally {
       loading.value = false
     }

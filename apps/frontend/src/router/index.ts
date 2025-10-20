@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from './../views/HomePage.vue'
 import PokemonDetail from './../components/PokemonDetail.vue'
+import NotFoundPage from './../views/NotFoundPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,15 @@ const router = createRouter({
       // allow the detail view to receive the route params as props if needed
       props: {
         detail: true,
+      },
+    },
+    {
+      // Catch-all 404 route
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: NotFoundPage,
+      meta: {
+        fullPage: true,
       },
     },
   ],

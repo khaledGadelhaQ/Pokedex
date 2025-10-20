@@ -438,7 +438,7 @@ Pokedex/
 #### ✅ Step 3: Routing to a Detail Page
 - [x] Set up routes for home (/)
 - [x] Create route for detail page (/pokemon/:id)
-- [ ] Create 404 NotFound page
+- [x] Create 404 NotFound page
 - [x] Create PokemonDetailPage.vue
 - [x] Fetch and display detailed Pokemon data
 - [x] Add navigation between list and detail
