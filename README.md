@@ -411,7 +411,91 @@ Pokedex/
 
 ## 🎨 Frontend Development Roadmap
 
-Coming soon! The frontend will be built with Vue.js 3, TypeScript, and Tailwind CSS.
+### ✅ Part 1: The Foundation
+
+#### ✅ Step 1: Project Scaffolding & Setup
+- [x] Create Vue 3 + TypeScript project with Vite
+- [x] Install and configure Tailwind CSS v3
+- [x] Install axios for API calls
+- [x] Install vue-router for navigation
+- [x] Install Pinia for state management
+- [x] Set up folder structure (views, components, services, stores, types)
+- [x] Configure PostCSS and Tailwind
+- [x] Create basic App.vue with RouterView
+
+#### ⏳ Step 2: Display the Pokémon List
+- [ ] Create TypeScript type definitions for Pokemon
+- [ ] Set up API service with axios
+- [ ] Create PokemonCard.vue component
+- [ ] Display Pokemon grid on HomePage
+- [ ] Show Pokemon image, number, name, and types
+- [ ] Add loading and error states
+- [ ] Style cards with Tailwind CSS
+- [ ] Implement responsive grid layout
+
+### ⏳ Part 2: Core Features (The MVP)
+
+#### ⏳ Step 3: Routing to a Detail Page
+- [ ] Set up routes for home (/)
+- [ ] Create route for detail page (/pokemon/:id)
+- [ ] Create 404 NotFound page
+- [ ] Create PokemonDetailPage.vue
+- [ ] Fetch and display detailed Pokemon data
+- [ ] Add navigation between list and detail
+- [ ] Make Pokemon clickable in the grid
+
+#### ⏳ Step 4: Implement Search
+- [ ] Add search input to HomePage
+- [ ] Implement computed property for filtering
+- [ ] Filter by Pokemon name
+- [ ] Filter by Pokemon number
+- [ ] Add search debouncing for performance
+- [ ] Show "no results" message
+- [ ] Clear search functionality
+
+#### ⏳ Step 5: Favorites System with Persistence
+- [ ] Create Pinia favorites store
+- [ ] Add favorite button to PokemonCard
+- [ ] Add favorite button to detail page
+- [ ] Implement localStorage persistence
+- [ ] Create Favorites page (/favorites)
+- [ ] Add route to favorites page
+- [ ] Add navigation menu/header
+- [ ] Show favorite count indicator
+
+### ⏳ Part 3: The "Nice-to-Haves" (Polish)
+
+#### ⏳ Step 6: Team Management
+- [ ] Create Pinia teams store
+- [ ] Build team management UI
+- [ ] Limit team to 6 Pokemon
+- [ ] Add/remove Pokemon from team
+- [ ] Create Teams page (/teams)
+- [ ] Connect to backend API for teams
+- [ ] Implement authentication token
+- [ ] Persist team data to backend
+
+#### ⏳ Step 7: UI Polish & Enhancements
+- [ ] Add loading spinners/skeletons
+- [ ] Improve error handling with user-friendly messages
+- [ ] Add image lightbox/modal for Pokemon images
+- [ ] Implement pagination for Pokemon list
+- [ ] Add filter by type functionality
+- [ ] Create type badge components
+- [ ] Add animations and transitions
+- [ ] Mobile-first responsive design
+- [ ] Add Pokemon stats visualization
+- [ ] Implement proper 404 handling
+
+#### ⏳ Step 8: Final Touches
+- [ ] Add header/navigation bar
+- [ ] Create footer
+- [ ] Improve accessibility (a11y)
+- [ ] Add meta tags for SEO
+- [ ] Test on multiple devices
+- [ ] Performance optimization
+- [ ] Code cleanup and refactoring
+- [ ] Update README with frontend instructions
 
 ## 📝 License
 
