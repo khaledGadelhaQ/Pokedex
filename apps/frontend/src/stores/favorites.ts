@@ -33,28 +33,32 @@ export const useFavoritesStore = defineStore('favorites', () => {
   }
 
   // Add a Pokemon to favorites
-  const addFavorite = (pokemonId: number) => {
-    if (!isFavorite(pokemonId)) {
-      favoriteIds.value.push(pokemonId)
-      saveFavorites()
+  const addFavorite = (pokemonId: number): { success: boolean; message: string } => {
+    if (isFavorite(pokemonId)) {
+      return { success: false, message: 'Pokémon is already in your favorites!' }
     }
+    favoriteIds.value.push(pokemonId)
+    saveFavorites()
+    return { success: true, message: 'Pokémon added to favorites!' }
   }
 
   // Remove a Pokemon from favorites
-  const removeFavorite = (pokemonId: number) => {
+  const removeFavorite = (pokemonId: number): { success: boolean; message: string } => {
     const index = favoriteIds.value.indexOf(pokemonId)
     if (index > -1) {
       favoriteIds.value.splice(index, 1)
       saveFavorites()
+      return { success: true, message: 'Pokémon removed from favorites!' }
     }
+    return { success: false, message: 'Pokémon not found in favorites.' }
   }
 
   // Toggle favorite status
-  const toggleFavorite = (pokemonId: number) => {
+  const toggleFavorite = (pokemonId: number): { success: boolean; message: string } => {
     if (isFavorite(pokemonId)) {
-      removeFavorite(pokemonId)
+      return removeFavorite(pokemonId)
     } else {
-      addFavorite(pokemonId)
+      return addFavorite(pokemonId)
     }
   }
 

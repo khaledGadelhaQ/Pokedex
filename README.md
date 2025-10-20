@@ -463,33 +463,37 @@ Pokedex/
 - [x] Preserve favorites filter when navigating between Pokemon
 - [x] Add active state styling to favorites button
 - [x] Show contextual empty state messages
+- [x] Add toast notifications for add/remove favorites
 
 ### ⏳ Part 3: The "Nice-to-Haves" (Polish)
 
-#### ⏳ Step 6: Team Management
-- [ ] Create Pinia teams store
-- [ ] Build team management UI
-- [ ] Limit team to 6 Pokemon
-- [ ] Add/remove Pokemon from team
-- [ ] Create Teams page (/teams)
-- [ ] Connect to backend API for teams
-- [ ] Implement authentication token
-- [ ] Persist team data to backend
+#### ✅ Step 6: Team Management
+- [x] Create Pinia team store with max 6 Pokemon limit
+- [x] Add team button to detail page (purple Users icon)
+- [x] Limit team to 6 Pokemon with validation
+- [x] Add/remove Pokemon from team with toast notifications
+- [x] Add team route (/pokemons/team) with filtering
+- [x] Show live team count in My Team button
+- [x] Toggle team button with active state styling
+- [x] Preserve team filter when navigating between Pokemon
+- [x] Implement localStorage persistence for team
+- [x] Show contextual empty state messages
 
 #### ⏳ Step 7: UI Polish & Enhancements
-- [ ] Add loading spinners/skeletons
-- [ ] Improve error handling with user-friendly messages
+- [x] Add loading spinners (implemented for loading, searching states)
+- [x] Improve error handling with user-friendly messages (error states with retry buttons)
+- [x] Implement pagination for Pokemon list (10 items per page)
+- [x] Create type badge components (implemented in PokemonCard)
+- [x] Mobile-first responsive design (flex-col md:flex-row, responsive layouts)
+- [x] Implement proper 404 handling (NotFoundPage for invalid routes and Pokemon IDs)
+- [x] Add toast notifications (success/error messages for team and favorites)
 - [ ] Add image lightbox/modal for Pokemon images
-- [ ] Implement pagination for Pokemon list
 - [ ] Add filter by type functionality
-- [ ] Create type badge components
-- [ ] Add animations and transitions
-- [ ] Mobile-first responsive design
 - [ ] Add Pokemon stats visualization
-- [ ] Implement proper 404 handling
+- [ ] Add animations and transitions
 
 #### ⏳ Step 8: Final Touches
-- [ ] Add header/navigation bar
+- [x] Add header/navigation (Pokédex title is clickable to return home)
 - [ ] Create footer
 - [ ] Improve accessibility (a11y)
 - [ ] Add meta tags for SEO

@@ -42,7 +42,14 @@ const isInTeam = computed(() => {
 // Toggle favorite
 const toggleFavorite = () => {
   if (selectedPokemon.value) {
-    favoritesStore.toggleFavorite(selectedPokemon.value.id)
+    const result = favoritesStore.toggleFavorite(selectedPokemon.value.id)
+    
+    // Show toast notification
+    if (result.success) {
+      toast.success(result.message)
+    } else {
+      toast.error(result.message)
+    }
   }
 }
 
