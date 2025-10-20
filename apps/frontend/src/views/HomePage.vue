@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { FunnelIcon, ArrowsUpDownIcon } from '@heroicons/vue/24/outline'
 import { pokemonService } from '../services/api'
 import { usePokemonStore } from '../stores/pokemon'
+import { useFavoritesStore } from '../stores/favorites'
 import type { Pokemon } from '../types/pokemon'
 import SearchBar from '../components/SearchBar.vue'
 import TeamFavoritesButtons from '../components/TeamFavoritesButtons.vue'
@@ -17,12 +18,27 @@ const isSearching = ref(false)
 const loading = ref(true)
 const error = ref<string | null>(null)
 const pokemonStore = usePokemonStore()
+const favoritesStore = useFavoritesStore()
 const router = useRouter()
+const route = useRoute()
 let searchTimeout: ReturnType<typeof setTimeout> | null = null
 
-// Computed: Show search results if searching, otherwise show all pokemons
+// Check if we should show only favorites. We accept either the route meta (direct /pokemons/favorites)
+// or a query param (favorites=1) so the mode persists when navigating to detail routes.
+const showFavoritesOnly = computed(() => {
+  return route.meta.showFavoritesOnly === true || route.query.favorites === '1'
+})
+
+// Computed: Show search results if searching, otherwise show all/filtered pokemons
 const displayedPokemons = computed(() => {
-  return searchQuery.value.trim() ? searchResults.value : pokemons.value
+  let pokemonList = searchQuery.value.trim() ? searchResults.value : pokemons.value
+  
+  // Filter by favorites if in favorites mode
+  if (showFavoritesOnly.value) {
+    pokemonList = pokemonList.filter(p => favoritesStore.isFavorite(p.id))
+  }
+  
+  return pokemonList
 })
 
 // Fetch Pokemon from backend
@@ -54,7 +70,14 @@ const handleSelectPokemon = async (pokemon: Pokemon) => {
 
   // Navigate to the detail URL so it's bookmarkable/shareable
   try {
-    await router.push({ name: 'pokemon-detail', params: { id: String(pokemon.id) } })
+    // Preserve favorites mode if currently in favorites view (check both meta and query)
+    const preserveFavorites = route.meta.showFavoritesOnly === true || route.query.favorites === '1'
+    await router.push({
+      name: 'pokemon-detail',
+      params: { id: String(pokemon.id) },
+      // keep a state so the detail view can navigate back preserving filter
+      query: preserveFavorites ? { favorites: '1' } : {},
+    })
   } catch (navErr) {
     console.error('Router navigation error:', navErr)
   }
@@ -102,7 +125,7 @@ onMounted(() => {
     <div class="px-4 pt-16 md:pt-[90px] pb-4">
       <div class="flex items-center justify-between mb-4 md:mb-6">
         <h1 class="font-bold text-2xl md:text-[34px] leading-tight md:leading-[41px] tracking-[0.374px] text-dark-1">
-          Pokédex
+          {{ showFavoritesOnly ? 'Favorites' : 'Pokédex' }}
         </h1>
         <!-- Filter/Sort Icons -->
         <div class="flex items-center gap-2 md:gap-3">
@@ -164,9 +187,14 @@ onMounted(() => {
     <!-- No Results Message -->
     <div v-else class="flex-1 flex items-center justify-center px-4">
       <div class="text-center">
-        <p class="text-xl font-bold text-dark-1 mb-2">No Pokémon Found</p>
+        <p class="text-xl font-bold text-dark-1 mb-2">
+          {{ showFavoritesOnly ? 'No Favorites Yet' : 'No Pokémon Found' }}
+        </p>
         <p class="text-grey-1">
-          Try searching with a different name or type
+          {{ showFavoritesOnly 
+            ? 'Click the heart icon on any Pokémon to add it to your favorites' 
+            : 'Try searching with a different name or type' 
+          }}
         </p>
       </div>
     </div>

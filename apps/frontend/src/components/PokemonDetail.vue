@@ -71,49 +71,53 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-full h-full flex items-center justify-center">
-    <!-- Loading State -->
-    <div v-if="loading" class="text-center px-4">
-      <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-white"></div>
-      <p class="text-white mt-4">Loading Pokémon...</p>
-    </div>
+  <div class="relative w-full h-full">
+    <!-- Favorite Button (Top Right) - Fixed position -->
+    <button
+      v-if="selectedPokemon"
+      @click="toggleFavorite"
+      class="absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-white/20 transition-colors"
+      :aria-label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+    >
+      <HeartIcon 
+        v-if="isFavorite" 
+        class="w-8 h-8 text-red-500"
+      />
+      <HeartIconOutline 
+        v-else 
+        class="w-8 h-8 text-white"
+      />
+    </button>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="text-center px-4">
-      <p class="text-2xl font-bold mb-2 text-white">Error</p>
-      <p class="text-lg text-white">{{ error }}</p>
-    </div>
+    <!-- Content Container -->
+    <div class="w-full h-full flex items-center justify-center">
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center px-4">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-white"></div>
+        <p class="text-white mt-4">Loading Pokémon...</p>
+      </div>
 
-    <!-- Empty State -->
-    <div v-else-if="!selectedPokemon" class="text-center px-4">
-      <p class="text-2xl font-bold mb-2 text-white">Select a Pokémon</p>
-      <p class="text-lg text-white">Click on a Pokémon from the list to view details</p>
-    </div>
+      <!-- Error State -->
+      <div v-else-if="error" class="text-center px-4">
+        <p class="text-2xl font-bold mb-2 text-white">Error</p>
+        <p class="text-lg text-white">{{ error }}</p>
+      </div>
 
-    <!-- Pokemon Detail -->
-    <div v-else class="relative text-center px-4">
-      <!-- Favorite Button (Top Right) -->
-      <button
-        @click="toggleFavorite"
-        class="absolute top-0 right-4 p-2 rounded-full hover:bg-white/20 transition-colors"
-        :aria-label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
-      >
-        <HeartIcon 
-          v-if="isFavorite" 
-          class="w-8 h-8 text-red-500"
-        />
-        <HeartIconOutline 
-          v-else 
-          class="w-8 h-8 text-white"
-        />
-      </button>
+      <!-- Empty State -->
+      <div v-else-if="!selectedPokemon" class="text-center px-4">
+        <p class="text-2xl font-bold mb-2 text-white">Select a Pokémon</p>
+        <p class="text-lg text-white">Click on a Pokémon from the list to view details</p>
+      </div>
 
-      <h1 class="text-4xl font-bold text-white mb-4">
-        {{ capitalizedName }}
-      </h1>
-      <p class="text-white text-lg">ID: {{ selectedPokemon.id }}</p>
-      <p class="text-white text-lg">Weight: {{ selectedPokemon.weight }}</p>
-      <p class="text-white text-lg">Height: {{ selectedPokemon.height }}</p>
+      <!-- Pokemon Detail -->
+      <div v-else class="text-center px-4">
+        <h1 class="text-4xl font-bold text-white mb-4">
+          {{ capitalizedName }}
+        </h1>
+        <p class="text-white text-lg">ID: {{ selectedPokemon.id }}</p>
+        <p class="text-white text-lg">Weight: {{ selectedPokemon.weight }}</p>
+        <p class="text-white text-lg">Height: {{ selectedPokemon.height }}</p>
+      </div>
     </div>
   </div>
 </template>

@@ -14,8 +14,7 @@ A modern, full-stack Pokédex application for the original 151 Pokémon, built w
 - [📚 API Documentation](#-api-documentation)
 - [📁 Project Structure](#-project-structure)
 - [🎯 Backend Development Roadmap](#-backend-development-roadmap)
-- [🚀 Deployment](#-deployment)
-- [🤝 Contributing](#-contributing)
+- [🎯 Frontend Development Roadmap](#-frontend-development-roadmap)
 - [📄 License](#-license)
 
 ## �🚀 Tech Stack
@@ -453,15 +452,17 @@ Pokedex/
 - [x] Show "no results" message
 - [x] Clear search functionality
 
-#### ⏳ Step 5: Favorites System with Persistence
-- [ ] Create Pinia favorites store
-- [ ] Add favorite button to PokemonCard
-- [ ] Add favorite button to detail page
-- [ ] Implement localStorage persistence
-- [ ] Create Favorites page (/favorites)
-- [ ] Add route to favorites page
-- [ ] Add navigation menu/header
-- [ ] Show favorite count indicator
+#### ✅ Step 5: Favorites System with Persistence
+- [x] Create Pinia favorites store
+- [x] Add favorite button to detail page
+- [x] Implement localStorage persistence
+- [x] Add favorites route (/pokemons/favorites)
+- [x] Filter Pokemon list to show only favorites
+- [x] Show live favorite count in button
+- [x] Toggle favorites button (click to filter, click again to show all)
+- [x] Preserve favorites filter when navigating between Pokemon
+- [x] Add active state styling to favorites button
+- [x] Show contextual empty state messages
 
 ### ⏳ Part 3: The "Nice-to-Haves" (Polish)
 

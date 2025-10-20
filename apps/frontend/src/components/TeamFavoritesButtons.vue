@@ -1,5 +1,35 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { UsersIcon, HeartIcon } from '@heroicons/vue/24/outline'
+import { useFavoritesStore } from '../stores/favorites'
+
+const router = useRouter()
+const route = useRoute()
+const favoritesStore = useFavoritesStore()
+
+// Get live favorites count
+const favoritesCount = computed(() => favoritesStore.favoritesCount)
+
+// Format the subtitle text
+const favoritesText = computed(() => {
+  const count = favoritesCount.value
+  return count === 1 ? '1 pokemon' : `${count} pokemons`
+})
+
+// Whether the favorites view is active (route name or meta)
+const isFavoritesActive = computed(() => {
+  return route.name === 'favorites' || route.meta.showFavoritesOnly === true || route.query.favorites === '1'
+})
+
+// Toggle favorites: navigate to favorites if not active, otherwise go home
+const toggleFavorites = () => {
+  if (isFavoritesActive.value) {
+    router.push({ name: 'home' })
+  } else {
+    router.push({ name: 'favorites' })
+  }
+}
 </script>
 
 <template>
@@ -14,11 +44,11 @@ import { UsersIcon, HeartIcon } from '@heroicons/vue/24/outline'
     </button>
 
     <!-- Favorites Button -->
-    <button class="favorites-button">
+    <button :class="['favorites-button', isFavoritesActive ? 'favorites-active' : '']" @click="toggleFavorites">
       <HeartIcon class="button-icon" />
       <div class="button-content">
         <div class="button-title">Favorites</div>
-        <div class="button-subtitle">12 pokemons</div>
+        <div class="button-subtitle">{{ favoritesText }}</div>
       </div>
     </button>
   </div>
@@ -73,6 +103,12 @@ button:hover {
   width: 28px;
   height: 28px;
   color: rgba(101, 203, 154, 0.3);
+}
+
+/* Active state: darker / stronger opacity to show selection */
+.favorites-active {
+  filter: brightness(0.85);
+  box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.03);
 }
 
 /* Button Content */
