@@ -124,7 +124,9 @@ export class PokemonsService {
         back_shiny_female: sprites.back_shiny_female || null,
       },
       types: types.map((t) => ({
-        type: t.type,
+        type: {
+          name: t.type,
+        },
         slot: t.slot,
       })),
       height: pokemon.height || 0,

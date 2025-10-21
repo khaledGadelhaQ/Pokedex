@@ -12,7 +12,9 @@ export class PokemonDetailsDto {
     back_shiny_female: string | null;
   };
   types: Array<{
-    type: string;
+    type: {
+      name: string;
+    };
     slot: number;
   }>;
   height: number;
