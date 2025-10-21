@@ -91,6 +91,44 @@ export default {
           "linear-gradient(109.73deg, rgba(101, 203, 154, 0.2) 0%, rgba(21, 208, 220, 0.2) 100%)",
         "level-orange-gradient":
           "linear-gradient(109.73deg, rgba(237, 202, 77, 0.3) 0%, rgba(231, 142, 29, 0.233826) 66.17%, rgba(228, 112, 5, 0.2) 100%)",
+
+        // Type-based background gradients for Pokemon detail pages
+        "type-gradient-normal":
+          "linear-gradient(180deg, #A3ACAE 0%, #8A9396 100%)",
+        "type-gradient-fire":
+          "linear-gradient(180deg, #FD7D25 0%, #E86C1C 100%)",
+        "type-gradient-water":
+          "linear-gradient(180deg, #4592C3 0%, #3781AC 100%)",
+        "type-gradient-electric":
+          "linear-gradient(180deg, #F4D23C 0%, #E0BE28 100%)",
+        "type-gradient-grass":
+          "linear-gradient(180deg, #95C24D 0%, #7FA83D 100%)",
+        "type-gradient-ice":
+          "linear-gradient(180deg, #A0D5E8 0%, #85BFD6 100%)",
+        "type-gradient-fighting":
+          "linear-gradient(180deg, #D14B5A 0%, #B83D4B 100%)",
+        "type-gradient-poison":
+          "linear-gradient(180deg, #BA7EC8 0%, #A465B3 100%)",
+        "type-gradient-ground":
+          "linear-gradient(180deg, #D78555 0%, #C06F40 100%)",
+        "type-gradient-flying":
+          "linear-gradient(180deg, #A1BBF3 0%, #89A5E0 100%)",
+        "type-gradient-psychic":
+          "linear-gradient(180deg, #F88FB2 0%, #E5789D 100%)",
+        "type-gradient-bug":
+          "linear-gradient(180deg, #99CAAB 0%, #7FB391 100%)",
+        "type-gradient-rock":
+          "linear-gradient(180deg, #C9B787 0%, #B1A170 100%)",
+        "type-gradient-ghost":
+          "linear-gradient(180deg, #7B62A3 0%, #66508A 100%)",
+        "type-gradient-dragon":
+          "linear-gradient(180deg, #0B6DC4 0%, #095CAA 100%)",
+        "type-gradient-dark":
+          "linear-gradient(180deg, #5A5465 0%, #49424F 100%)",
+        "type-gradient-steel":
+          "linear-gradient(180deg, #63AEB9 0%, #4E969F 100%)",
+        "type-gradient-fairy":
+          "linear-gradient(180deg, #ECA0E5 0%, #D685CF 100%)",
       },
       boxShadow: {
         card: "0px 15px 15px rgba(0, 0, 0, 0.04)",

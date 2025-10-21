@@ -35,9 +35,3 @@ const goHome = () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-h1 {
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-}
-</style>

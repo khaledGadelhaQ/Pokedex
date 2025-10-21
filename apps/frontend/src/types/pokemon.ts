@@ -39,17 +39,3 @@ export interface Pokemon {
   species?: string | null
   form?: string | null
 }
-
-// API Response types
-export interface PokemonListResponse {
-  data: Pokemon[]
-  total: number
-  page: number
-  limit: number
-}
-
-export interface ApiError {
-  message: string
-  error?: string
-  statusCode?: number
-}

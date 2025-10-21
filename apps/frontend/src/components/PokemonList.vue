@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid'
 import PokemonCard from './PokemonCard.vue'
 import type { Pokemon } from '../types/pokemon'
@@ -17,6 +17,11 @@ const emit = defineEmits<{
 // Pagination
 const currentPage = ref(1)
 const itemsPerPage = 10
+
+// Reset to page 1 when the pokemon list changes (e.g., filtering)
+watch(() => props.pokemons, () => {
+  currentPage.value = 1
+})
 
 const totalPages = computed(() => {
   return Math.ceil(props.pokemons.length / itemsPerPage)
@@ -43,6 +48,10 @@ const goToNextPage = () => {
 const handlePokemonClick = (pokemon: Pokemon) => {
   emit('selectPokemon', pokemon)
 }
+
+// Computed properties for button states
+const isFirstPage = computed(() => currentPage.value === 1)
+const isLastPage = computed(() => currentPage.value === totalPages.value)
 </script>
 
 <template>
@@ -62,8 +71,8 @@ const handlePokemonClick = (pokemon: Pokemon) => {
       <!-- Previous Button -->
       <button
         @click="goToPreviousPage"
-        :disabled="currentPage === 1"
-        :class="currentPage === 1 ? 'opacity-30 cursor-not-allowed' : 'hover:opacity-80'"
+        :disabled="isFirstPage"
+        :class="isFirstPage ? 'opacity-30 cursor-not-allowed' : 'hover:opacity-80'"
         class="w-[30px] h-[30px] flex items-center justify-center bg-white rounded-full transition-opacity"
       >
         <ChevronLeftIcon class="w-5 h-5 text-dark-1" />
@@ -77,8 +86,8 @@ const handlePokemonClick = (pokemon: Pokemon) => {
       <!-- Next Button -->
       <button
         @click="goToNextPage"
-        :disabled="currentPage === totalPages"
-        :class="currentPage === totalPages ? 'opacity-30 cursor-not-allowed' : 'hover:opacity-80'"
+        :disabled="isLastPage"
+        :class="isLastPage ? 'opacity-30 cursor-not-allowed' : 'hover:opacity-80'"
         class="w-[30px] h-[30px] flex items-center justify-center bg-white rounded-full transition-opacity"
       >
         <ChevronRightIcon class="w-5 h-5 text-dark-1" />

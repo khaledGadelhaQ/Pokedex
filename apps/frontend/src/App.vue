@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+const route = useRoute()
+
+// Check if we're viewing a Pokemon detail on mobile
+const isDetailView = computed(() => {
+  return route.name === 'pokemon-detail' && route.params.id
+})
 </script>
 
 <template>
@@ -11,29 +19,28 @@ import { RouterView } from 'vue-router'
     
     <!-- Normal two-panel layout for other routes -->
     <template v-else>
-      <!-- Left Panel: Pokemon List (full width on mobile, 450px on tablet+) -->
-      <div class="w-full md:w-[450px] flex-shrink-0 bg-pokedex-bg overflow-y-auto">
-        <RouterView name="sidebar" />
+      <!-- Left Panel: Pokemon List (hidden on mobile when detail is shown) -->
+      <div 
+        :class="[
+          'w-full md:w-[450px] h-full flex-shrink-0 bg-pokedex-bg overflow-y-auto',
+          { 'hidden md:block': isDetailView }
+        ]"
+      >
         <RouterView />
       </div>
 
       <!-- Divider (hidden on mobile) -->
       <div class="hidden md:block w-px bg-grey-border flex-shrink-0"></div>
 
-      <!-- Right Panel: Pokemon Detail (hidden on mobile, shown when Pokemon selected) -->
-      <div class="hidden md:flex md:flex-1 bg-detail-gradient overflow-y-auto">
+      <!-- Right Panel: Pokemon Detail (full screen on mobile when detail shown) -->
+      <div 
+        :class="[
+          'md:flex md:flex-1 h-full bg-detail-gradient overflow-y-auto',
+          { 'flex flex-1': isDetailView, 'hidden': !isDetailView }
+        ]"
+      >
         <RouterView name="detail" />
       </div>
     </template>
   </div>
 </template>
-
-<style>
-/* Global app styles
-body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
-} */
-</style>
-

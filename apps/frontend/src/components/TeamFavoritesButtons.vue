@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
 import { UsersIcon, HeartIcon } from '@heroicons/vue/24/outline'
 import { useFavoritesStore } from '../stores/favorites'
 import { useTeamStore } from '../stores/team'
+import { useUIStore } from '../stores/ui'
 
-const router = useRouter()
-const route = useRoute()
 const favoritesStore = useFavoritesStore()
 const teamStore = useTeamStore()
+const uiStore = useUIStore()
 
 // Get live team count
 const teamCount = computed(() => teamStore.teamCount)
@@ -28,31 +27,27 @@ const favoritesText = computed(() => {
   return count === 1 ? '1 pokemon' : `${count} pokemons`
 })
 
-// Whether the team view is active (route name or meta)
-const isTeamActive = computed(() => {
-  return route.name === 'team' || route.meta.showTeamOnly === true || route.query.team === '1'
-})
+// Whether the team view is active
+const isTeamActive = computed(() => uiStore.filterMode === 'team')
 
-// Whether the favorites view is active (route name or meta)
-const isFavoritesActive = computed(() => {
-  return route.name === 'favorites' || route.meta.showFavoritesOnly === true || route.query.favorites === '1'
-})
+// Whether the favorites view is active
+const isFavoritesActive = computed(() => uiStore.filterMode === 'favorites')
 
-// Toggle team: navigate to team if not active, otherwise go home
+// Toggle team: switch filter mode
 const toggleTeam = () => {
   if (isTeamActive.value) {
-    router.push({ name: 'home' })
+    uiStore.setFilterMode('all')
   } else {
-    router.push({ name: 'team' })
+    uiStore.setFilterMode('team')
   }
 }
 
-// Toggle favorites: navigate to favorites if not active, otherwise go home
+// Toggle favorites: switch filter mode
 const toggleFavorites = () => {
   if (isFavoritesActive.value) {
-    router.push({ name: 'home' })
+    uiStore.setFilterMode('all')
   } else {
-    router.push({ name: 'favorites' })
+    uiStore.setFilterMode('favorites')
   }
 }
 </script>

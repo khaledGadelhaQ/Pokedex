@@ -15,28 +15,6 @@ const router = createRouter({
       },
     },
     {
-      path: '/pokemons/favorites',
-      name: 'favorites',
-      components: {
-        default: HomePage,
-        detail: PokemonDetail,
-      },
-      meta: {
-        showFavoritesOnly: true,
-      },
-    },
-    {
-      path: '/pokemons/team',
-      name: 'team',
-      components: {
-        default: HomePage,
-        detail: PokemonDetail,
-      },
-      meta: {
-        showTeamOnly: true,
-      },
-    },
-    {
       path: '/pokemons/:id',
       name: 'pokemon-detail',
       components: {
