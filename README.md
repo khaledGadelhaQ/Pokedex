@@ -155,49 +155,88 @@ pnpm backend:build
 pnpm backend:start:prod
 ```
 
-### Using Docker
+### Using Docker (Recommended)
 
-The entire stack can be run with Docker Compose:
+The entire full-stack application can be run with Docker Compose. This includes PostgreSQL database, NestJS backend, and Vue.js frontend served via Nginx.
+
+**Quick Start (First Time Setup):**
 
 ```bash
-# Start all services (PostgreSQL + Backend)
-docker-compose up -d
+# Option 1: Use the helper script
+./docker.sh setup
 
-# View logs
-docker-compose logs -f backend
-
-# Check service status
-docker-compose ps
-
-# Stop all services
-docker-compose down
-
-# Stop and remove volumes (⚠️ this will delete database data)
-docker-compose down -v
+# Option 2: Manual setup
+sudo docker-compose up -d
+# Wait 30-60 seconds for services to be healthy
+sudo docker-compose exec backend pnpm seed
 ```
 
-**First time setup with Docker:**
+**Access the application:**
+- **Frontend:** http://localhost:8080
+- **Backend API:** http://localhost:3000/api/v1
+- **API Documentation:** http://localhost:3000/api
+
+**Common Docker Commands:**
 
 ```bash
-# Start services
-docker-compose up -d
+# Start all services
+sudo docker-compose up -d
 
-# Wait for services to be healthy (check with docker-compose ps)
+# View logs (all services)
+sudo docker-compose logs -f
 
-# Run migrations
-docker-compose exec backend pnpm prisma:migrate
+# View logs (specific service)
+sudo docker-compose logs -f frontend
+sudo docker-compose logs -f backend
+sudo docker-compose logs -f postgres
 
-# Seed database (uses remote URLs by default, set in docker-compose.yml)
-docker-compose exec backend pnpm seed
+# Check service status and health
+sudo docker-compose ps
 
-# OR: Seed with downloaded images
-docker-compose exec backend sh -c "SKIP_IMAGE_DOWNLOAD=false pnpm seed"
+# Stop all services (preserves data)
+sudo docker-compose down
 
-# The API will be available at http://localhost:3000/api/v1
+# Stop and remove volumes (⚠️ deletes all data)
+sudo docker-compose down -v
+
+# Rebuild after code changes
+sudo docker-compose up -d --build
+
+# Rebuild specific service
+sudo docker-compose up -d --build frontend
+```
+
+**Using the Docker Helper Script:**
+
+```bash
+# Make executable (first time only)
+chmod +x docker.sh
+
+# Available commands
+./docker.sh start    # Start all services
+./docker.sh stop     # Stop all services
+./docker.sh restart  # Restart services
+./docker.sh logs     # View all logs
+./docker.sh status   # Check service health
+./docker.sh seed     # Seed database
+./docker.sh setup    # Complete first-time setup
+./docker.sh clean    # Remove everything (⚠️ destructive)
 ```
 
 **Docker Services:**
-- **PostgreSQL** - Available on port 5433
+- **PostgreSQL** - Database on port 5433
+- **Backend API** - NestJS on port 3000
+- **Frontend** - Vue.js + Nginx on port 8080
+
+**Note:** The seed command uses remote Pokemon sprite URLs by default (`SKIP_IMAGE_DOWNLOAD=true`). To download sprites locally instead:
+
+```bash
+sudo docker-compose exec backend sh -c "SKIP_IMAGE_DOWNLOAD=false pnpm seed"
+```
+
+For detailed Docker architecture and configuration, see [DOCKER.md](./DOCKER.md).
+
+
 - **Backend API** - Available on port 3000
 - **Persistent volumes** - Database and uploaded images are persisted
 

@@ -17,8 +17,9 @@ case "$1" in
     echo -e "${YELLOW}Starting all services...${NC}"
     sudo docker-compose up -d
     echo -e "${GREEN}✅ Services started!${NC}"
-    echo -e "Backend: http://localhost:3000/api/v1"
-    echo -e "Swagger: http://localhost:3000/api/docs"
+    echo -e "Frontend: http://localhost:8080"
+    echo -e "Backend API: http://localhost:3000/api/v1"
+    echo -e "API Docs: http://localhost:3000/api"
     echo -e "PostgreSQL: localhost:5433"
     ;;
   
@@ -43,8 +44,12 @@ case "$1" in
     ;;
   
   build)
-    echo -e "${YELLOW}Building backend image...${NC}"
-    sudo docker-compose build backend
+    echo -e "${YELLOW}Building images...${NC}"
+    if [ -z "$2" ]; then
+      sudo docker-compose build
+    else
+      sudo docker-compose build "$2"
+    fi
     echo -e "${GREEN}✅ Build complete!${NC}"
     ;;
   
@@ -55,9 +60,24 @@ case "$1" in
     ;;
   
   seed)
-    echo -e "${YELLOW}Seeding database...${NC}"
+    echo -e "${YELLOW}Seeding database with Pokemon data...${NC}"
     sudo docker-compose exec backend pnpm seed
-    echo -e "${GREEN}✅ Seeding complete!${NC}"
+    echo -e "${GREEN}✅ Database seeded with 151 Pokemon!${NC}"
+    ;;
+  
+  setup)
+    echo -e "${YELLOW}Setting up the application...${NC}"
+    echo -e "1. Starting services..."
+    sudo docker-compose up -d
+    echo -e "2. Waiting for services to be healthy (30 seconds)..."
+    sleep 30
+    echo -e "3. Seeding database..."
+    sudo docker-compose exec backend pnpm seed
+    echo -e "${GREEN}✅ Setup complete!${NC}"
+    echo -e "\nAccess the application:"
+    echo -e "  Frontend: http://localhost:8080"
+    echo -e "  Backend API: http://localhost:3000/api/v1"
+    echo -e "  API Docs: http://localhost:3000/api"
     ;;
   
   status)
@@ -79,18 +99,25 @@ case "$1" in
     ;;
   
   *)
-    echo "Usage: $0 {start|stop|restart|logs|build|migrate|seed|status|clean}"
+    echo "Usage: $0 {start|stop|restart|logs|build|migrate|seed|setup|status|clean}"
     echo ""
     echo "Commands:"
-    echo "  start     - Start all services"
+    echo "  start     - Start all services (postgres, backend, frontend)"
     echo "  stop      - Stop all services"
     echo "  restart   - Restart all services"
     echo "  logs      - View logs (optionally specify service: logs backend)"
-    echo "  build     - Build backend Docker image"
+    echo "  build     - Build Docker images (optionally specify service: build frontend)"
     echo "  migrate   - Run database migrations"
-    echo "  seed      - Seed database with Pokemon data"
-    echo "  status    - Show service status"
+    echo "  seed      - Seed database with 151 Pokemon"
+    echo "  setup     - Complete first-time setup (start + seed)"
+    echo "  status    - Show service status and health"
     echo "  clean     - Remove all containers, volumes, and images (⚠️ destructive)"
+    echo ""
+    echo "Examples:"
+    echo "  $0 start                 # Start all services"
+    echo "  $0 logs backend          # View backend logs"
+    echo "  $0 build frontend        # Rebuild only frontend"
+    echo "  $0 setup                 # First-time setup"
     exit 1
     ;;
 esac

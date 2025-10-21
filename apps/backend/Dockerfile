@@ -41,11 +41,11 @@ COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 # Copy backend package.json
 COPY apps/backend/package.json ./apps/backend/
 
-# Copy Prisma schema (needed for generation)
+# Copy entire Prisma folder (schema, seed scripts, types)
 COPY apps/backend/prisma ./apps/backend/prisma
 
-# Install production dependencies only
-RUN pnpm install --prod --frozen-lockfile
+# Install all dependencies (including dev dependencies for seeding)
+RUN pnpm install --frozen-lockfile
 
 # Generate Prisma Client in production stage
 WORKDIR /app/apps/backend
@@ -53,6 +53,15 @@ RUN npx prisma generate
 
 # Copy built application from builder
 COPY --from=builder /app/apps/backend/dist ./dist
+
+# Copy source files (needed for seeding with ts-node)
+COPY --from=builder /app/apps/backend/src ./src
+
+# Copy tsconfig for TypeScript module resolution
+COPY --from=builder /app/apps/backend/tsconfig.json ./tsconfig.json
+
+# Copy pokemons.json (required for seeding)
+COPY pokemons.json /app/pokemons.json
 
 # Create uploads directory
 RUN mkdir -p uploads/sprites
