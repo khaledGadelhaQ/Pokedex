@@ -538,10 +538,10 @@ Pokedex/
 
 #### ⏳ Step 8: Final Touches
 - [x] Add header/navigation (Pokédex title is clickable to return home)
-- [ ] Test on multiple devices
-- [ ] Performance optimization
-- [ ] Code cleanup and refactoring
-- [ ] Update README with frontend instructions
+- [x] Test on multiple devices
+- [x] Performance optimization
+- [x] Code cleanup and refactoring
+- [x] Update README with frontend instructions
 
 ## 📝 License
 
